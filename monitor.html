@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>System Monitor</title>
+<style>
+body {
+  background: black;
+  color: #ff2b2b;
+  font-family: monospace;
+  height: 100vh;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+#screen {
+  width: 92%;
+  max-width: 390px;
+  border: 2px solid #ff2b2b;
+  padding: 18px;
+  box-shadow: 0 0 40px rgba(255,0,0,0.6);
+  animation: flicker 0.15s infinite;
+}
+.blink { animation: blink 1s infinite; }
+.logs {
+  margin-top: 10px;
+  font-size: 12px;
+  height: 90px;
+  overflow: hidden;
+  border-top: 1px solid #ff2b2b;
+  padding-top: 6px;
+}
+@keyframes blink {
+  0%,50%,100%{opacity:1;}
+  25%,75%{opacity:0;}
+}
+@keyframes flicker {
+  0%{opacity:1;}
+  50%{opacity:0.85;}
+  100%{opacity:1;}
+}
+</style>
+</head>
+
+<body>
+<div id="screen">
+  SYSTEM INTEGRITY MONITOR<br>
+  Initializing core services…<br>
+  ⚠ Irregular activity detected<br>
+  STATUS: <span class="blink">UNRESOLVED</span><br><br>
+
+  Battery usage abnormal<br>
+  Background activity increasing<br><br>
+
+  <div id="time">Last check: --:--</div>
+
+  <div class="logs" id="logs">
+    &gt; loading system modules…
+  </div>
+</div>
+
+<script>
+const lines = [
+  "> checking system flags…",
+  "> isolation failed",
+  "> retry scheduled",
+  "> background task persists",
+  "> monitoring continues",
+  "> state unknown",
+  "> do not interrupt",
+  "> awaiting resolution…"
+];
+
+let i = 0;
+setInterval(() => {
+  logs.innerHTML += "<br>" + lines[i % lines.length];
+  logs.scrollTop = logs.scrollHeight;
+  i++;
+}, 1800);
+
+setInterval(() => {
+  time.innerText = "Last check: " + new Date().toLocaleTimeString();
+}, 4000);
+
+if (navigator.vibrate) {
+  setInterval(() => navigator.vibrate(120), 12000);
+}
+</script>
+</body>
+</html>
